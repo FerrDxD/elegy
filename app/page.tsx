@@ -31,12 +31,12 @@ export default async function LandingPage() {
           <span className="relative z-10">Mulai Menulis</span>
           <div className="absolute inset-0 h-full w-full bg-white/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out"></div>
         </Link>
-        <a 
-          href="#about"
+        <Link 
+          href="/wall"
           className="px-8 py-3.5 border border-border/60 text-text-primary rounded-full hover:bg-surface/50 hover:border-accent/50 backdrop-blur-sm transition-all duration-500"
         >
-          Pelajari lebih lanjut
-        </a>
+          Lihat Dinding Pelepasan
+        </Link>
       </div>
 
       <div id="about" className="mt-40 max-w-2xl text-left pt-20 pb-20 animate-fade-in opacity-0" style={{ animationDelay: '0.9s' }}>

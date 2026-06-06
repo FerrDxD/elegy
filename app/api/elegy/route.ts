@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { pastSelf, presentSelf } = body;
+    const { pastSelf, presentSelf, isPublic, unlockDate } = body;
 
     if (!pastSelf || !presentSelf || pastSelf.length < 10 || presentSelf.length < 10) {
       return NextResponse.json({ error: 'Input tidak valid. Minimal 10 karakter.' }, { status: 400 });
@@ -27,12 +27,15 @@ export async function POST(req: Request) {
       presentSelf,
       eulogyText: aiResult.eulogy,
       mirrorText: aiResult.mirror,
+      isPublic: isPublic || false,
+      unlockDate: unlockDate ? new Date(unlockDate) : null,
     }).returning({ id: elegies.id });
 
     return NextResponse.json({
       id: inserted[0].id,
       eulogy: aiResult.eulogy,
-      mirror: aiResult.mirror
+      mirror: aiResult.mirror,
+      isLocked: !!unlockDate
     }, { status: 201 });
 
   } catch (error: any) {

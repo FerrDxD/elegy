@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, boolean } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
 export const users = pgTable('users', {
@@ -19,5 +19,7 @@ export const elegies = pgTable('elegies', {
   presentSelf: text('present_self').notNull(),
   eulogyText: text('eulogy_text').notNull(),
   mirrorText: text('mirror_text').notNull(),
+  isPublic: boolean('is_public').default(false),
+  unlockDate: timestamp('unlock_date'),
   createdAt: timestamp('created_at').defaultNow(),
 });

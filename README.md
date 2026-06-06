@@ -24,7 +24,7 @@ Elegy adalah sebuah web app refleksi diri yang intim. Aplikasi ini memberikan ru
 
 1. **Clone repository ini**
    ```bash
-   git clone https://github.com/username/elegy.git
+   git clone https://github.com/FerrDxD/elegy.git
    cd elegy
    ```
 
