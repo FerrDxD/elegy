@@ -17,7 +17,7 @@ export default function ArchiveList({ items }: { items: any[] }) {
 
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-border/40">
               <div className="text-xs text-text-muted/70 font-mono">
-                {new Date(item.createdAt).toLocaleDateString("id-ID", {
+                {new Date(item.createdAt || Date.now()).toLocaleDateString("id-ID", {
                   year: 'numeric', month: 'short', day: 'numeric'
                 })}
               </div>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+// @ts-ignore: CSS module import declarations are handled by Next.js
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Elegy - A space to grieve who you used to be",

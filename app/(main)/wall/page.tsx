@@ -42,7 +42,7 @@ export default async function WallPage() {
               style={{ animationDelay: `${(i % 10) * 0.1}s` }}
             >
               <div className="text-xs text-text-muted/60 font-mono mb-4">
-                {new Date(item.createdAt).toLocaleDateString("id-ID", {
+                {new Date(item.createdAt || Date.now()).toLocaleDateString("id-ID", {
                   year: 'numeric', month: 'short', day: 'numeric'
                 })}
               </div>

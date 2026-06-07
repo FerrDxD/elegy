@@ -33,7 +33,7 @@ export default async function ResultPage({ params }: { params: { id: string } })
             <span>&larr;</span> Kembali
           </Link>
           <div className="text-text-muted font-mono text-sm">
-            {new Date(elegy.createdAt || "").toLocaleDateString("id-ID", {
+            {new Date(elegy.createdAt || Date.now()).toLocaleDateString("id-ID", {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
