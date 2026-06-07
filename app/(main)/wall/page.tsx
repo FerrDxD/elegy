@@ -62,7 +62,7 @@ export default async function WallPage() {
         </div>
       )}
       
-      <div className="mt-20 text-center">
+      <div className="mt-20 text-center relative z-10">
         <Link 
           href="/write" 
           className="inline-block px-8 py-3 bg-accent/10 text-accent border border-accent/30 rounded-full hover:bg-accent hover:text-background transition-all duration-300"
