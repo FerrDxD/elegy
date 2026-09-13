@@ -10,47 +10,144 @@ export default async function LandingPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center relative overflow-hidden selection:bg-accent/30">
-      {/* Decorative gradient blob */}
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-accent/15 to-transparent rounded-full blur-[100px] -z-10 pointer-events-none animate-pulse-glow"></div>
+    <div className="min-h-screen bg-background text-text-primary selection:bg-accent/30 flex flex-col relative overflow-hidden">
+      {/* Ambient background glow elements */}
+      <div className="fixed top-[-10%] left-[20%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[140px] pointer-events-none -z-10 animate-pulse-glow"></div>
+      <div className="fixed bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-accent/5 rounded-full blur-[160px] pointer-events-none -z-10"></div>
 
-      <h1 className="text-7xl md:text-9xl font-serif mb-6 text-transparent bg-clip-text bg-gradient-to-b from-text-primary to-text-muted tracking-wide animate-fade-in opacity-0" style={{ animationDelay: '0.1s' }}>Elegy</h1>
-      <p className="text-xl md:text-3xl font-serif italic text-text-muted mb-10 animate-fade-in opacity-0" style={{ animationDelay: '0.3s' }}>
-        a space to grieve who you used to be
-      </p>
-      
-      <p className="max-w-lg text-text-muted/80 mb-14 font-sans font-light leading-relaxed animate-fade-in opacity-0 text-base md:text-lg" style={{ animationDelay: '0.5s' }}>
-        Tuliskan siapa kamu dulu dan siapa kamu sekarang. Izinkan AI merangkai elegi perpisahan untuk versi lamamu, dan sebuah cermin untuk melihat dirimu yang baru.
-      </p>
-
-      <div className="flex flex-col sm:flex-row gap-6 animate-fade-in opacity-0" style={{ animationDelay: '0.7s' }}>
-        <Link 
-          href="/login" 
-          className="group relative px-8 py-3.5 bg-accent text-background font-medium rounded-full overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(138,122,96,0.4)]"
-        >
-          <span className="relative z-10">Mulai Menulis</span>
-          <div className="absolute inset-0 h-full w-full bg-white/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out"></div>
-        </Link>
-        <Link 
-          href="/wall"
-          className="px-8 py-3.5 border border-border/60 text-text-primary rounded-full hover:bg-surface/50 hover:border-accent/50 backdrop-blur-sm transition-all duration-500"
-        >
-          Lihat Dinding Pelepasan
-        </Link>
-      </div>
-
-      <div id="about" className="mt-40 max-w-2xl text-left pt-20 pb-20 animate-fade-in opacity-0" style={{ animationDelay: '0.9s' }}>
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent mb-16"></div>
-        <h2 className="text-4xl font-serif mb-8 text-transparent bg-clip-text bg-gradient-to-r from-text-primary to-accent">Mengapa Elegy?</h2>
-        <div className="space-y-6 text-lg">
-          <p className="text-text-muted/90 leading-relaxed font-light">
-            Kita seringkali terlalu sibuk bergerak maju hingga lupa mengucapkan selamat tinggal pada versi diri kita yang tertinggal. Versi yang mungkin pernah terluka, naif, atau penuh harapan berbeda.
-          </p>
-          <p className="text-text-muted/90 leading-relaxed font-light">
-            Elegy hadir bukan untuk menghakimi masa lalumu, melainkan untuk memberikan ruang bagi perpisahan yang hangat, dan menyambut pertumbuhanmu dengan jujur.
-          </p>
+      {/* Top Header */}
+      <header className="w-full max-w-6xl mx-auto px-6 h-20 flex items-center justify-between z-20">
+        <span className="font-serif text-2xl tracking-[0.25em] text-text-primary">
+          ELEGY
+        </span>
+        <div className="flex items-center gap-6 text-sm">
+          <Link href="/wall" className="text-text-muted hover:text-text-primary transition-colors hidden sm:block">
+            Dinding Pelepasan
+          </Link>
+          <Link href="/login" className="text-text-muted hover:text-text-primary transition-colors">
+            Masuk
+          </Link>
+          <Link
+            href="/register"
+            className="px-5 py-2 bg-accent/15 border border-accent/40 text-accent rounded-full hover:bg-accent hover:text-background transition-all duration-300 font-medium text-xs sm:text-sm"
+          >
+            Daftar Akun
+          </Link>
         </div>
-      </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="flex-1 flex flex-col items-center justify-center text-center px-6 pt-12 pb-24 max-w-4xl mx-auto z-10 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border/80 bg-surface/50 text-text-muted text-xs font-mono mb-8 backdrop-blur-sm">
+          <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+          Ruang kontemplasi & refleksi diri AI
+        </div>
+
+        <h1 className="text-5xl sm:text-7xl md:text-8xl font-serif leading-[1.1] mb-8 text-transparent bg-clip-text bg-gradient-to-b from-text-primary via-text-primary to-text-muted">
+          Melepas Siapa Kamu Dulu. <br />
+          <span className="italic font-light text-accent">Menyambut Dirimu Yang Baru.</span>
+        </h1>
+
+        <p className="max-w-xl text-text-muted font-sans font-light text-base sm:text-lg leading-relaxed mb-12">
+          Tuliskan fase hidup atau versi diri yang ingin kamu lepaskan. Biarkan AI merangkai elegi perpisahan yang hangat dan cermin refleksi yang jujur.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-20">
+          <Link
+            href="/register"
+            className="px-9 py-4 bg-accent text-background font-medium rounded-full hover:bg-accent/90 transition-all duration-300 shadow-[0_0_30px_rgba(138,122,96,0.3)] text-center"
+          >
+            Mulai Menulis Elegi
+          </Link>
+          <Link
+            href="/wall"
+            className="px-9 py-4 bg-surface/60 border border-border/80 text-text-primary rounded-full hover:border-accent/50 hover:bg-surface backdrop-blur-sm transition-all duration-300 text-center"
+          >
+            Jelajahi Dinding Pelepasan
+          </Link>
+        </div>
+
+        {/* Card Interactive Preview Showcase */}
+        <div className="w-full text-left bg-surface/30 backdrop-blur-md border border-border/60 rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/40">
+            <span className="w-3 h-3 rounded-full bg-accent/40"></span>
+            <span className="text-xs font-mono text-text-muted/70 uppercase tracking-widest">Preview Refleksi</span>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-3">
+              <span className="text-accent text-xs font-serif italic flex items-center gap-2">
+                <span className="w-6 h-px bg-accent/40"></span> Versi Lama
+              </span>
+              <p className="text-sm font-light text-text-primary/80 leading-relaxed italic">
+                "Dulu saya selalu takut berkata tidak dan merasa bertanggung jawab atas kebahagiaan semua orang..."
+              </p>
+            </div>
+            <div className="space-y-3">
+              <span className="text-accent text-xs font-serif italic flex items-center gap-2">
+                <span className="w-6 h-px bg-accent/40"></span> Elegi AI
+              </span>
+              <p className="font-serif italic text-base text-text-primary/95 leading-relaxed">
+                "Selamat jalan pada kegelisahan yang dulu mendikte langkahmu. Keberadaan versi itu tidak sia-sia, ia adalah benih dari ketenanganmu hari ini."
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* 3 Core Pillars Section */}
+      <section className="w-full bg-surface/20 border-t border-border/40 py-24 px-6 z-10">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center max-w-xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl font-serif mb-4 text-transparent bg-clip-text bg-gradient-to-r from-text-primary to-accent">
+              Bagaimana Elegy Bekerja?
+            </h2>
+            <p className="text-text-muted font-light text-sm sm:text-base">
+              Proses tiga langkah sederhana untuk berdamai dengan perjalanan hidupmu.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-surface/40 border border-border/50 rounded-2xl p-8 hover:border-accent/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center text-accent font-serif mb-6 text-lg">
+                1
+              </div>
+              <h3 className="font-serif text-xl mb-3 text-text-primary">Tulis Diri Dulu & Sekarang</h3>
+              <p className="text-sm font-light text-text-muted leading-relaxed">
+                Deskripsikan siapa kamu di masa lalu dan apa yang telah berubah dalam dirimu saat ini secara jujur.
+              </p>
+            </div>
+
+            <div className="bg-surface/40 border border-border/50 rounded-2xl p-8 hover:border-accent/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center text-accent font-serif mb-6 text-lg">
+                2
+              </div>
+              <h3 className="font-serif text-xl mb-3 text-text-primary">Elegi & Cermin AI</h3>
+              <p className="text-sm font-light text-text-muted leading-relaxed">
+                AI merangkai puisi perpisahan yang puitis dan analisis cermin prosa yang objektif tentang pertumbuhanmu.
+              </p>
+            </div>
+
+            <div className="bg-surface/40 border border-border/50 rounded-2xl p-8 hover:border-accent/30 transition-all duration-300">
+              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center text-accent font-serif mb-6 text-lg">
+                3
+              </div>
+              <h3 className="font-serif text-xl mb-3 text-text-primary">Kapsul Waktu & Dinding</h3>
+              <p className="text-sm font-light text-text-muted leading-relaxed">
+                Simpan secara pribadi, segel sebagai kapsul waktu untuk masa depan, atau bagikan secara anonim di Dinding Pelepasan.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="w-full border-t border-border/40 py-12 px-6 text-center text-xs text-text-muted/60 font-mono z-10">
+        <p className="mb-2">ELEGY — Every ending is a quiet beginning.</p>
+        <p>&copy; {new Date().getFullYear()} Elegy App. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
