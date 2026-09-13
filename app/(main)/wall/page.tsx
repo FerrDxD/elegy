@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { elegies } from "@/lib/db/schema";
 import { desc, eq, and, or, isNull, lte } from "drizzle-orm";
 import Link from "next/link";
+import ReactionButton from "@/components/elegy/ReactionButton";
 
 export const revalidate = 0; // Disable cache so wall is always fresh
 
@@ -41,10 +42,13 @@ export default async function WallPage() {
               className="break-inside-avoid bg-surface/30 backdrop-blur-sm border border-border/60 rounded-2xl p-6 hover:border-accent/40 transition-colors duration-500 shadow-sm animate-fade-in opacity-0"
               style={{ animationDelay: `${(i % 10) * 0.1}s` }}
             >
-              <div className="text-xs text-text-muted/60 font-mono mb-4">
-                {new Date(item.createdAt || Date.now()).toLocaleDateString("id-ID", {
-                  year: 'numeric', month: 'short', day: 'numeric'
-                })}
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-xs text-text-muted/60 font-mono">
+                  {new Date(item.createdAt || Date.now()).toLocaleDateString("id-ID", {
+                    year: 'numeric', month: 'short', day: 'numeric'
+                  })}
+                </div>
+                <ReactionButton elegyId={item.id} initialCount={item.reactionsCount || 0} />
               </div>
               
               <p className="font-serif italic text-text-primary/90 leading-relaxed mb-4 text-lg">

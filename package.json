@@ -19,15 +19,13 @@
     "next": "14.2.3",
     "next-auth": "5.0.0-beta.19",
     "react": "^18",
-    "react-dom": "^18",
-    "uuid": "^9.0.1"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.19",
     "drizzle-kit": "^0.21.4",
     "eslint": "^8",

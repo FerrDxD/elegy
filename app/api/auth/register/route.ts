@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 
 export async function POST(req: Request) {
   try {
@@ -12,14 +12,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
     }
 
-    const existingUser = await db.select().from(users).where(eq(users.username, username));
-    if (existingUser.length > 0) {
-      return NextResponse.json({ error: "Username sudah digunakan" }, { status: 400 });
-    }
-
-    const existingEmail = await db.select().from(users).where(eq(users.email, email));
-    if (existingEmail.length > 0) {
-      return NextResponse.json({ error: "Email sudah digunakan" }, { status: 400 });
+    const existing = await db.select().from(users).where(or(eq(users.username, username), eq(users.email, email))).limit(1);
+    if (existing.length > 0) {
+      const isUsername = existing[0].username === username;
+      return NextResponse.json({ error: isUsername ? "Username sudah digunakan" : "Email sudah digunakan" }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

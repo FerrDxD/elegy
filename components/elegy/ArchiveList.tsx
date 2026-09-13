@@ -37,7 +37,7 @@ export default function ArchiveList({ items }: { items: any[] }) {
                   <p className="text-xs font-light text-text-muted">
                     Bisa dibaca pada: <br/>
                     <span className="font-mono text-accent/80 mt-1 block">
-                      {new Date(item.unlockDate).toLocaleDateString("id-ID", {
+                      {new Date(item.unlockDate!).toLocaleDateString("id-ID", {
                         year: 'numeric', month: 'long', day: 'numeric'
                       })}
                     </span>

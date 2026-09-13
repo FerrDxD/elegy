@@ -27,13 +27,8 @@ Hanya kembalikan JSON. Tidak ada teks lain, tidak ada markdown backtick.`;
 
   try {
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    
-    // Safety fallback just in case the model wraps in markdown
-    const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
-    
-    const json = JSON.parse(cleanedText);
+    const text = result.response.text();
+    const json = JSON.parse(text.replace(/```json|```/g, '').trim());
     return { eulogy: json.eulogy, mirror: json.mirror };
   } catch (error: any) {
     console.error("Gemini Error:", error);

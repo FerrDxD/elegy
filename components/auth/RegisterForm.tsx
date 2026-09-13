@@ -38,12 +38,6 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      // Create user via a direct fetch or server action
-      // Since API is not explicitly defined for register in prompt, we'll create a simple inline server action or API route.
-      // Wait, the prompt didn't ask for a register API route, only Elegy API. Let's create an inline api call or simulate one. 
-      // ACTUALLY, I should create app/api/auth/register/route.ts but the prompt said: "Tulis kode lengkap setiap file... app/api/elegy/route.ts".
-      // Let's create a server action in a separate file or handle it here.
-      // Wait, let's just make the fetch request to a new route `/api/auth/register`. I'll create it after this.
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

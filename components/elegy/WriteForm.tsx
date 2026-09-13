@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDots from "../ui/LoadingDots";
 
-function DictationButton({ onResult, isListening, toggleListen }: { onResult: (text: string) => void, isListening: boolean, toggleListen: () => void }) {
+function DictationButton({ isListening, toggleListen }: { isListening: boolean, toggleListen: () => void }) {
   return (
     <button
       type="button"
@@ -36,87 +36,50 @@ export default function WriteForm() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Voice Recognition states
-  const [listeningPast, setListeningPast] = useState(false);
-  const [listeningPresent, setListeningPresent] = useState(false);
+  const [activeSpeechField, setActiveSpeechField] = useState<'past' | 'present' | null>(null);
   const recognitionRef = useRef<any>(null);
 
-  const initSpeechRecognition = () => {
-    if (typeof window !== "undefined") {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "id-ID";
-        return recognition;
-      }
-    }
-    return null;
-  };
-
   const toggleListen = (field: 'past' | 'present') => {
-    if (field === 'past') {
-      if (listeningPast) {
-        recognitionRef.current?.stop();
-        setListeningPast(false);
-      } else {
-        if (listeningPresent) {
-          recognitionRef.current?.stop();
-          setListeningPresent(false);
-        }
-        startListening(field, setPastSelf, pastSelf);
-      }
-    } else {
-      if (listeningPresent) {
-        recognitionRef.current?.stop();
-        setListeningPresent(false);
-      } else {
-        if (listeningPast) {
-          recognitionRef.current?.stop();
-          setListeningPast(false);
-        }
-        startListening(field, setPresentSelf, presentSelf);
-      }
+    if (activeSpeechField === field) {
+      recognitionRef.current?.stop();
+      setActiveSpeechField(null);
+      return;
     }
-  };
 
-  const startListening = (field: 'past' | 'present', setter: any, currentValue: string) => {
-    const recognition = initSpeechRecognition();
-    if (!recognition) {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
       alert("Browser Anda tidak mendukung fitur perekam suara.");
       return;
     }
 
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "id-ID";
     recognitionRef.current = recognition;
-    let finalTranscript = currentValue ? currentValue + " " : "";
+
+    const setter = field === 'past' ? setPastSelf : setPresentSelf;
+    const initialVal = field === 'past' ? pastSelf : presentSelf;
+    let finalTranscript = initialVal ? initialVal + " " : "";
 
     recognition.onresult = (event: any) => {
       let interimTranscript = "";
       for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript + " ";
-        } else {
-          interimTranscript += event.results[i][0].transcript;
-        }
+        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript + " ";
+        else interimTranscript += event.results[i][0].transcript;
       }
       setter(finalTranscript + interimTranscript);
     };
 
-    recognition.onerror = (event: any) => {
-      console.error(event.error);
-      if (field === 'past') setListeningPast(false);
-      if (field === 'present') setListeningPresent(false);
-    };
-
-    recognition.onend = () => {
-      if (field === 'past') setListeningPast(false);
-      if (field === 'present') setListeningPresent(false);
-    };
+    recognition.onerror = () => setActiveSpeechField(null);
+    recognition.onend = () => setActiveSpeechField(null);
 
     recognition.start();
-    if (field === 'past') setListeningPast(true);
-    if (field === 'present') setListeningPresent(true);
+    setActiveSpeechField(field);
   };
 
 
@@ -169,9 +132,8 @@ export default function WriteForm() {
             Siapa kamu dulu?
           </label>
           <DictationButton 
-            isListening={listeningPast} 
+            isListening={activeSpeechField === 'past'} 
             toggleListen={() => toggleListen('past')} 
-            onResult={setPastSelf} 
           />
         </div>
         <p className="text-text-muted font-light text-sm">
@@ -185,6 +147,11 @@ export default function WriteForm() {
           className="w-full h-40 bg-surface/50 border border-border rounded-xl p-6 text-text-primary focus:outline-none focus:border-accent focus:bg-surface focus:ring-1 focus:ring-accent/50 transition-all duration-500 resize-none placeholder:text-text-muted/30 font-light leading-relaxed backdrop-blur-sm shadow-inner"
           disabled={isLoading}
         />
+        <div className="flex justify-end text-xs font-mono text-text-muted/60 pt-1">
+          <span className={pastSelf.length > 0 && pastSelf.length < 10 ? "text-red-400" : ""}>
+            {pastSelf.length}/10 karakter min.
+          </span>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -193,9 +160,8 @@ export default function WriteForm() {
             Siapa kamu sekarang?
           </label>
           <DictationButton 
-            isListening={listeningPresent} 
+            isListening={activeSpeechField === 'present'} 
             toggleListen={() => toggleListen('present')} 
-            onResult={setPresentSelf} 
           />
         </div>
         <p className="text-text-muted font-light text-sm">
@@ -209,6 +175,11 @@ export default function WriteForm() {
           className="w-full h-40 bg-surface/50 border border-border rounded-xl p-6 text-text-primary focus:outline-none focus:border-accent focus:bg-surface focus:ring-1 focus:ring-accent/50 transition-all duration-500 resize-none placeholder:text-text-muted/30 font-light leading-relaxed backdrop-blur-sm shadow-inner"
           disabled={isLoading}
         />
+        <div className="flex justify-end text-xs font-mono text-text-muted/60 pt-1">
+          <span className={presentSelf.length > 0 && presentSelf.length < 10 ? "text-red-400" : ""}>
+            {presentSelf.length}/10 karakter min.
+          </span>
+        </div>
       </div>
 
       {/* New Features Toggle */}

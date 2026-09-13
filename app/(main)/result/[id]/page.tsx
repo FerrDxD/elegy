@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import ResultCard from "@/components/elegy/ResultCard";
+import ExportCardButton from "@/components/elegy/ExportCardButton";
 import Link from "next/link";
 
 export default async function ResultPage({ params }: { params: { id: string } }) {
@@ -26,6 +27,8 @@ export default async function ResultPage({ params }: { params: { id: string } })
       redirect("/archive");
     }
 
+    const isLocked = elegy.unlockDate && new Date(elegy.unlockDate) > new Date();
+
     return (
       <div className="min-h-screen p-6 md:p-12 max-w-4xl mx-auto animate-fade-in pb-24">
         <header className="mb-12 flex justify-between items-center border-b border-border pb-6">
@@ -43,7 +46,7 @@ export default async function ResultPage({ params }: { params: { id: string } })
           </div>
         </header>
 
-        {elegy.unlockDate && new Date(elegy.unlockDate) > new Date() ? (
+        {isLocked ? (
           <div className="flex flex-col items-center justify-center py-32 text-center space-y-8 animate-fade-in">
             <div className="w-24 h-24 rounded-full border border-border/50 bg-surface/30 flex items-center justify-center animate-pulse-glow">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-accent"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -53,7 +56,7 @@ export default async function ResultPage({ params }: { params: { id: string } })
               Perpisahanmu telah diabadikan dan dikunci untuk masa depan. Elegi ini baru bisa dibaca kembali pada:
             </p>
             <div className="text-lg md:text-xl font-mono text-accent bg-accent/10 px-8 py-4 rounded-2xl border border-accent/20 shadow-[0_0_30px_rgba(138,122,96,0.1)]">
-              {new Date(elegy.unlockDate).toLocaleDateString("id-ID", {
+              {new Date(elegy.unlockDate!).toLocaleDateString("id-ID", {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
               })}
             </div>
@@ -62,16 +65,17 @@ export default async function ResultPage({ params }: { params: { id: string } })
           <ResultCard elegy={elegy} />
         )}
 
-        <div className="mt-16 flex flex-col sm:flex-row gap-6 justify-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
+        <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.8s' }}>
+          {!isLocked && <ExportCardButton eulogyText={elegy.eulogyText} mirrorText={elegy.mirrorText} />}
           <Link 
             href="/write" 
-            className="px-8 py-3 bg-surface border border-border text-text-primary text-center rounded-full hover:border-accent transition-all duration-300"
+            className="px-6 py-2.5 bg-surface border border-border text-text-primary text-center rounded-full hover:border-accent transition-all duration-300 text-sm"
           >
             Tulis refleksi baru
           </Link>
           <Link 
             href="/archive" 
-            className="px-8 py-3 bg-accent text-background font-medium text-center rounded-full hover:bg-accent/90 transition-all duration-300 shadow-[0_0_20px_rgba(138,122,96,0.2)]"
+            className="px-6 py-2.5 bg-accent text-background font-medium text-center rounded-full hover:bg-accent/90 transition-all duration-300 shadow-[0_0_20px_rgba(138,122,96,0.2)] text-sm"
           >
             Lihat semua arsip
           </Link>
