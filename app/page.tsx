@@ -43,7 +43,7 @@ export default async function LandingPage() {
           Ruang kontemplasi & refleksi diri AI
         </div>
 
-        <h1 className="text-5xl sm:text-7xl md:text-8xl font-serif leading-[1.1] mb-8 text-transparent bg-clip-text bg-gradient-to-b from-text-primary via-text-primary to-text-muted">
+        <h1 className="w-full text-5xl sm:text-7xl md:text-8xl font-serif leading-[1.1] mb-8 text-transparent bg-clip-text bg-gradient-to-b from-text-primary via-text-primary to-text-muted break-words">
           Melepas Siapa Kamu Dulu. <br />
           <span className="italic font-light text-accent">Menyambut Dirimu Yang Baru.</span>
         </h1>

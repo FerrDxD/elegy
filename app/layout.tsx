@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className="antialiased min-h-screen font-sans bg-background text-text-primary">
+      <body className="antialiased min-h-screen font-sans bg-background text-text-primary overflow-x-hidden">
         {children}
       </body>
     </html>

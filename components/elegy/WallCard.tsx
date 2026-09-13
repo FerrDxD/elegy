@@ -36,7 +36,7 @@ export default function WallCard({
           <ReactionButton elegyId={id} initialCount={reactionsCount} />
         </div>
 
-        <p className="font-serif italic text-text-primary/95 leading-relaxed mb-4 text-lg">
+        <p className="font-serif italic text-text-primary/95 leading-relaxed mb-4 text-lg line-clamp-6 break-words">
           "{eulogyText}"
         </p>
 

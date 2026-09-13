@@ -15,19 +15,19 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/80 border-b border-border/40 transition-colors">
-      <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/write" className="font-serif text-xl tracking-[0.2em] text-text-primary hover:text-accent transition-colors">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2 overflow-hidden">
+        <Link href="/write" className="font-serif text-lg sm:text-xl tracking-[0.2em] text-text-primary hover:text-accent transition-colors shrink-0">
           ELEGY
         </Link>
 
-        <nav className="flex items-center gap-6 text-sm">
+        <nav className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm shrink-0">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`transition-colors py-1 ${
+                className={`transition-colors py-1 shrink-0 ${
                   isActive
                     ? "text-accent font-medium border-b border-accent"
                     : "text-text-muted hover:text-text-primary"
@@ -40,7 +40,7 @@ export default function Navbar() {
 
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="text-xs text-text-muted/60 hover:text-red-400 transition-colors ml-2 font-mono"
+            className="text-[11px] sm:text-xs text-text-muted/60 hover:text-red-400 transition-colors ml-1 font-mono shrink-0"
             title="Keluar dari akun"
           >
             Keluar
