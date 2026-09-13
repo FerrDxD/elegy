@@ -7,21 +7,63 @@ import WallCard from "@/components/elegy/WallCard";
 export const revalidate = 0; // Disable cache so wall is always fresh
 
 export default async function WallPage() {
-  // Fetch public elegies that are NOT locked by time capsule
-  const publicElegies = await db
-    .select()
-    .from(elegies)
-    .where(
-      and(
-        eq(elegies.isPublic, true),
-        or(
-          isNull(elegies.unlockDate),
-          lte(elegies.unlockDate, new Date())
+  let publicElegies: any[] = [];
+
+  try {
+    const now = new Date();
+    publicElegies = await db
+      .select({
+        id: elegies.id,
+        createdAt: elegies.createdAt,
+        eulogyText: elegies.eulogyText,
+        mirrorText: elegies.mirrorText,
+        pastSelf: elegies.pastSelf,
+        reactionsCount: elegies.reactionsCount,
+      })
+      .from(elegies)
+      .where(
+        and(
+          eq(elegies.isPublic, true),
+          or(
+            isNull(elegies.unlockDate),
+            lte(elegies.unlockDate, now)
+          )
         )
       )
-    )
-    .orderBy(desc(elegies.createdAt))
-    .limit(50);
+      .orderBy(desc(elegies.createdAt))
+      .limit(50);
+  } catch (error) {
+    console.error("Wall query error:", error);
+    // Fallback attempt without reactionsCount column if DB schema is pending migration
+    try {
+      const now = new Date();
+      const rawElegies = await db
+        .select({
+          id: elegies.id,
+          createdAt: elegies.createdAt,
+          eulogyText: elegies.eulogyText,
+          mirrorText: elegies.mirrorText,
+          pastSelf: elegies.pastSelf,
+        })
+        .from(elegies)
+        .where(
+          and(
+            eq(elegies.isPublic, true),
+            or(
+              isNull(elegies.unlockDate),
+              lte(elegies.unlockDate, now)
+            )
+          )
+        )
+        .orderBy(desc(elegies.createdAt))
+        .limit(50);
+
+      publicElegies = rawElegies.map((e) => ({ ...e, reactionsCount: 0 }));
+    } catch (fallbackError) {
+      console.error("Wall fallback query error:", fallbackError);
+      publicElegies = [];
+    }
+  }
 
   return (
     <div className="min-h-screen p-6 md:p-12 max-w-5xl mx-auto animate-fade-in relative">
