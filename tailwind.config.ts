@@ -39,7 +39,7 @@ const config: Config = {
         }
       },
       animation: {
-        "fade-in": "fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "fade-in": "fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) both",
         "pulse-glow": "pulseGlow 8s ease-in-out infinite",
         "shimmer": "shimmer 2s infinite",
         "float": "float 6s ease-in-out infinite",

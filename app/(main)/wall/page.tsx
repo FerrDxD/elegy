@@ -2,23 +2,26 @@ import { db } from "@/lib/db";
 import { elegies } from "@/lib/db/schema";
 import { desc, eq, and, or, isNull, lte } from "drizzle-orm";
 import Link from "next/link";
-import ReactionButton from "@/components/elegy/ReactionButton";
+import WallCard from "@/components/elegy/WallCard";
 
 export const revalidate = 0; // Disable cache so wall is always fresh
 
 export default async function WallPage() {
   // Fetch public elegies that are NOT locked by time capsule
-  const publicElegies = await db.query.elegies.findMany({
-    where: and(
-      eq(elegies.isPublic, true),
-      or(
-        isNull(elegies.unlockDate),
-        lte(elegies.unlockDate, new Date())
+  const publicElegies = await db
+    .select()
+    .from(elegies)
+    .where(
+      and(
+        eq(elegies.isPublic, true),
+        or(
+          isNull(elegies.unlockDate),
+          lte(elegies.unlockDate, new Date())
+        )
       )
-    ),
-    orderBy: [desc(elegies.createdAt)],
-    limit: 50
-  });
+    )
+    .orderBy(desc(elegies.createdAt))
+    .limit(50);
 
   return (
     <div className="min-h-screen p-6 md:p-12 max-w-5xl mx-auto animate-fade-in relative">
@@ -35,41 +38,25 @@ export default async function WallPage() {
           Belum ada elegi yang dibagikan. Jadilah yang pertama melepaskan.
         </div>
       ) : (
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-          {publicElegies.map((item, i) => (
-            <div 
-              key={item.id} 
-              className="break-inside-avoid bg-surface/30 backdrop-blur-sm border border-border/60 rounded-2xl p-6 hover:border-accent/40 transition-colors duration-500 shadow-sm animate-fade-in opacity-0"
-              style={{ animationDelay: `${(i % 10) * 0.1}s` }}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <div className="text-xs text-text-muted/60 font-mono">
-                  {new Date(item.createdAt || Date.now()).toLocaleDateString("id-ID", {
-                    year: 'numeric', month: 'short', day: 'numeric'
-                  })}
-                </div>
-                <ReactionButton elegyId={item.id} initialCount={item.reactionsCount || 0} />
-              </div>
-              
-              <p className="font-serif italic text-text-primary/90 leading-relaxed mb-4 text-lg">
-                "{item.eulogyText}"
-              </p>
-
-              <div className="pt-4 border-t border-border/40 mt-4">
-                <span className="text-accent/50 text-[10px] uppercase tracking-[0.2em] block mb-2 font-medium">Dari masa lalunya</span>
-                <p className="text-xs font-light text-text-muted line-clamp-3 leading-relaxed">
-                  {item.pastSelf}
-                </p>
-              </div>
-            </div>
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6">
+          {publicElegies.map((item) => (
+            <WallCard
+              key={item.id}
+              id={item.id}
+              createdAt={item.createdAt}
+              eulogyText={item.eulogyText}
+              mirrorText={item.mirrorText}
+              pastSelf={item.pastSelf}
+              reactionsCount={item.reactionsCount || 0}
+            />
           ))}
         </div>
       )}
-      
+
       <div className="mt-20 text-center relative z-10">
         <Link 
           href="/write" 
-          className="inline-block px-8 py-3 bg-accent/10 text-accent border border-accent/30 rounded-full hover:bg-accent hover:text-background transition-all duration-300"
+          className="inline-block px-8 py-3 bg-accent/10 text-accent border border-accent/30 rounded-full hover:bg-accent hover:text-background transition-all duration-300 font-medium"
         >
           Tulis Elegimu Sendiri
         </Link>
